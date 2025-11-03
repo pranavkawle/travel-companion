@@ -622,7 +622,7 @@ If working with a team:
 
 ## Notes
 
-- All file paths assume Next.js project structure at `/Users/pkawle/github/personal/travel-companion/`
+- All file paths assume Next.js project structure at `<project-root>/` (replace `<project-root>` with your local project directory)
 - Tasks marked [P] can be executed in parallel within their phase
 - Tasks marked [USX] belong to a specific user story and enable independent delivery
 - Auth0 configuration tasks (T016, T020) require Auth0 Dashboard access
