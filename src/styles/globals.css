@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+/* CSS Variables for theming */
+@theme {
+  --color-primary: #0066CC;
+  --color-primary-light: #3399FF;
+  --color-primary-dark: #004C99;
+  --color-danger: #CC0000;
+  --color-danger-light: #FF3333;
+  --color-danger-dark: #990000;
+  --color-success: #00AA00;
+  --color-success-light: #00DD00;
+  --color-success-dark: #008800;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Touch-friendly minimum sizes (44x44px per WCAG) */
+@layer utilities {
+  .touch-target {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+  }
+  
+  .btn-touch {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Focus visible for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid #0066CC;
+  outline-offset: 2px;
+}
+
+/* Ensure sufficient color contrast for WCAG 2.1 AA */
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: bold;
+  }
+
+  a {
+    color: #0066CC;
+  }
+  
+  a:hover,
+  a:focus {
+    text-decoration: underline;
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
