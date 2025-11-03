@@ -24,7 +24,6 @@ export const mobileNumberSchema = z
 export const airportCodeSchema = z
   .string()
   .length(3, 'Airport code must be exactly 3 characters')
-  .transform(val => val.toUpperCase())
   .regex(/^[A-Z]{3}$/, 'Airport code must contain only letters');
 
 // User validation
