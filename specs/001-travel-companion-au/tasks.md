@@ -23,7 +23,7 @@ description: "Implementation task list for Travel Companion AU"
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create Next.js 14 project with TypeScript and App Router in /Users/pkawle/github/personal/travel-companion/
+- [ ] T001 Create Next.js 14 project with TypeScript and App Router in <project-root>/
 - [ ] T002 Configure next.config.js for static export mode (output: 'export', images: { unoptimized: true }, trailingSlash: true)
 - [ ] T003 [P] Install core dependencies: @auth0/auth0-react, @prisma/client, @tanstack/react-query, tailwindcss
 - [ ] T004 [P] Initialize BiomeJS configuration in biome.json for linting and formatting
