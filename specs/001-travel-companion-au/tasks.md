@@ -44,10 +44,10 @@ description: "Implementation task list for Travel Companion AU"
 - [x] T010 Configure Prisma datasource for Azure SQL (sqlserver provider) with connection pooling
 - [x] T011 Add Prisma enums: AccountStatus, DataSource, ConversationStatus, ReportType, ReportStatus, ReportPriority
 - [x] T012 Add all entity relationships and indexes per data-model.md in prisma/schema.prisma
-- [ ] T013 Create initial Prisma migration: npx prisma migrate dev --name init
-- [ ] T014 Generate Prisma Client: npx prisma generate
+- [x] T013 Create initial Prisma migration: npx prisma migrate dev --name init
+- [x] T014 Generate Prisma Client: npx prisma generate
 - [x] T015 Create Prisma client singleton in src/lib/prisma.ts with connection management
-- [ ] T016 [P] Configure Auth0 application (SPA type) with password and magic link authentication
+- [x] T016 [P] Configure Auth0 application (SPA type) with password and magic link authentication
 - [x] T017 [P] Create Auth0 configuration in src/lib/auth0.ts with domain, clientId, audience, redirect_uri
 - [x] T018 [P] Setup Auth0Provider in src/app/layout.tsx wrapping entire application
 - [x] T019 [P] Create Auth0 custom hook in src/hooks/useAuth.ts wrapping useAuth0
@@ -60,10 +60,10 @@ description: "Implementation task list for Travel Companion AU"
 - [x] T026 [P] Setup global styles in src/styles/globals.css with Tailwind imports
 - [x] T027 [P] Create responsive layout component in src/app/layout.tsx with mobile-first navigation
 - [x] T028 [P] Setup error boundary component in src/components/ui/ErrorBoundary.tsx
-- [ ] T029 [P] Configure Jest for unit testing in jest.config.js
-- [ ] T030 [P] Setup React Testing Library configuration
-- [ ] T031 [P] Create test utilities in tests/utils/ for mocking Auth0, Prisma, and React Query
-- [ ] T032 [P] Setup accessibility testing with Axe in tests/accessibility/a11y.test.ts
+- [x] T029 [P] Configure Jest for unit testing in jest.config.js
+- [x] T030 [P] Setup React Testing Library configuration
+- [x] T031 [P] Create test utilities in tests/utils/ for mocking Auth0, Prisma, and React Query
+- [x] T032 [P] Setup accessibility testing with Axe in tests/accessibility/a11y.test.ts
 - [x] T033 [P] Create reusable UI components: src/components/ui/Button.tsx (44x44px minimum)
 - [x] T034 [P] Create reusable UI components: src/components/ui/Input.tsx (accessible labels)
 - [x] T035 [P] Create reusable UI components: src/components/ui/Modal.tsx (keyboard navigation)
