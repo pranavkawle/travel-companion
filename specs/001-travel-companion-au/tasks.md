@@ -51,7 +51,7 @@ description: "Implementation task list for Travel Companion AU"
 - [x] T017 [P] Create Auth0 configuration in src/lib/auth0.ts with domain, clientId, audience, redirect_uri
 - [x] T018 [P] Setup Auth0Provider in src/app/layout.tsx wrapping entire application
 - [x] T019 [P] Create Auth0 custom hook in src/hooks/useAuth.ts wrapping useAuth0
-- [ ] T020 [P] Configure Auth0 Actions for mobile number storage in user_metadata during registration
+- [x] T020 [P] Configure Auth0 Actions for mobile number storage in user_metadata during registration
 - [x] T021 [P] Setup TanStack Query in src/lib/queryClient.ts with QueryClientProvider
 - [x] T022 [P] Add QueryClientProvider to src/app/layout.tsx
 - [x] T023 [P] Create base TypeScript types in src/types/: user.ts, flight.ts, message.ts, search.ts

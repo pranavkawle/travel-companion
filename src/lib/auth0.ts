@@ -1,10 +1,12 @@
 export const auth0Config = {
-  domain: process.env.NEXT_PUBLIC_AUTH0_DOMAIN || '',
-  clientId: process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID || '',
+  domain: process.env.NEXT_PUBLIC_AUTH0_DOMAIN!,
+  clientId: process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID!,
   authorizationParams: {
-    redirect_uri: typeof window !== 'undefined' ? window.location.origin : '',
+    redirect_uri: typeof window !== 'undefined' 
+      ? `${window.location.origin}/callback` 
+      : 'http://localhost:3000/callback',
     audience: process.env.NEXT_PUBLIC_AUTH0_AUDIENCE,
-    scope: 'openid profile email',
+    scope: 'openid profile email'
   },
   cacheLocation: 'memory' as const,
   useRefreshTokens: true,
