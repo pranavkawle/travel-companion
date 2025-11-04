@@ -1,49 +1,90 @@
+'use client';
+
+import { useAuth0 } from '@auth0/auth0-react';
+import { Button } from '@/components/ui/Button';
+import { useRouter } from 'next/navigation';
+
 export default function HomePage() {
-  return (
-    <div className="max-w-4xl mx-auto">
-      <div className="text-center py-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          Welcome to Travel Companion AU
-        </h1>
-        <p className="text-xl text-gray-600 mb-8">
-          Find language assistance companions for your flights
-        </p>
-        <div className="flex gap-4 justify-center">
-          <a
-            href="/register"
-            className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors min-h-11 inline-flex items-center"
-          >
-            Get Started
-          </a>
-          <a
-            href="/login"
-            className="border-2 border-primary text-primary px-6 py-3 rounded-lg hover:bg-primary hover:text-white transition-colors min-h-11 inline-flex items-center"
-          >
-            Login
-          </a>
-        </div>
+  const { isAuthenticated, isLoading, loginWithRedirect, logout, user } = useAuth0();
+  const router = useRouter();
+
+  const handleLogin = () => {
+    loginWithRedirect({
+      appState: { returnTo: '/' }
+    });
+  };
+
+  const handleLogout = () => {
+    logout({ 
+      logoutParams: { 
+        returnTo: typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000' 
+      } 
+    });
+  };
+
+  const handleSignUp = () => {
+    router.push('/register');
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <p>Loading...</p>
       </div>
-      
-      <div className="grid md:grid-cols-3 gap-6 mt-12">
-        <div className="p-6 bg-white rounded-lg shadow">
-          <h3 className="font-bold text-lg mb-2">Privacy First</h3>
-          <p className="text-gray-600">
-            Your mobile number is never exposed. We only share your first name and languages.
-          </p>
-        </div>
-        
-        <div className="p-6 bg-white rounded-lg shadow">
-          <h3 className="font-bold text-lg mb-2">Easy Matching</h3>
-          <p className="text-gray-600">
-            Search for companions on the same flight route with matching language needs.
-          </p>
-        </div>
-        
-        <div className="p-6 bg-white rounded-lg shadow">
-          <h3 className="font-bold text-lg mb-2">Secure Messaging</h3>
-          <p className="text-gray-600">
-            Connect with your travel companions through our secure messaging system.
-          </p>
+    );
+  }
+
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4">
+      <div className="w-full max-w-2xl text-center">
+        <h1 className="mb-4 text-4xl font-bold text-gray-900">
+          Travel Companion AU
+        </h1>
+        <p className="mb-8 text-lg text-gray-600">
+          Connect with fellow travelers for language assistance on Australian flights
+        </p>
+
+        {isAuthenticated ? (
+          <div className="space-y-4">
+            <p className="text-gray-700">
+              Welcome, {user?.email || user?.name}!
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Button onClick={handleLogout} variant="secondary">
+                Log Out
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
+            <Button onClick={handleSignUp} className="min-w-[200px]">
+              Sign Up
+            </Button>
+            <Button onClick={handleLogin} variant="secondary" className="min-w-[200px]">
+              Log In
+            </Button>
+          </div>
+        )}
+
+        <div className="mt-12 grid gap-6 text-left sm:grid-cols-3">
+          <div className="rounded-lg bg-white p-6 shadow">
+            <h3 className="mb-2 font-semibold text-gray-900">🗣️ Language Help</h3>
+            <p className="text-sm text-gray-600">
+              Get assistance with language barriers during your flight
+            </p>
+          </div>
+          <div className="rounded-lg bg-white p-6 shadow">
+            <h3 className="mb-2 font-semibold text-gray-900">✈️ Flight Based</h3>
+            <p className="text-sm text-gray-600">
+              Connect based on your actual flight details
+            </p>
+          </div>
+          <div className="rounded-lg bg-white p-6 shadow">
+            <h3 className="mb-2 font-semibold text-gray-900">🔒 Private</h3>
+            <p className="text-sm text-gray-600">
+              Your mobile number stays private and secure
+            </p>
+          </div>
         </div>
       </div>
     </div>
