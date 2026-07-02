@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TravelCompanion.Api/TravelCompanion.Api.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TravelCompanion.IntegrationTests/TravelCompanion.IntegrationTests.csproj" />
+    <Project Path="tests/TravelCompanion.UnitTests/TravelCompanion.UnitTests.csproj" />
+  </Folder>
+</Solution>

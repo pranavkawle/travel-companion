@@ -1,0 +1,1020 @@
+openapi: 3.0.3
+info:
+  title: Travel Companion API
+  version: 1.0.0
+  description: |
+    Travel Companion — connect travelers who need language assistance with
+    those who can provide it on the same flight.
+  contact:
+    name: Travel Companion
+servers:
+  - url: http://localhost:5000
+    description: Local development
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    RegisterRequest:
+      type: object
+      required: [first_name, languages_spoken]
+      properties:
+        first_name:
+          type: string
+          maxLength: 100
+        languages_spoken:
+          type: array
+          items:
+            type: string
+          description: ISO 639-1 codes
+
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+        first_name:
+          type: string
+        languages_spoken:
+          type: array
+          items:
+            type: string
+        mobile_verified:
+          type: boolean
+        is_blocked:
+          type: boolean
+        notification_opt_out:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+
+    UpdateUserRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+          maxLength: 100
+        languages_spoken:
+          type: array
+          items:
+            type: string
+        notification_opt_out:
+          type: boolean
+
+    PostType:
+      type: string
+      enum: [SEEKING_ASSISTANCE, OFFERING_ASSISTANCE]
+
+    PostSegmentDto:
+      type: object
+      required: [segment_order, flight_number, airline, origin_iata, destination_iata, departure_time, arrival_time]
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        segment_order:
+          type: integer
+          minimum: 1
+        flight_number:
+          type: string
+        airline:
+          type: string
+        origin_iata:
+          type: string
+        destination_iata:
+          type: string
+        departure_time:
+          type: string
+          format: date-time
+        arrival_time:
+          type: string
+          format: date-time
+
+    CreatePostRequest:
+      type: object
+      required: [post_type, origin_iata, final_destination_iata, travel_date, segments]
+      properties:
+        post_type:
+          $ref: '#/components/schemas/PostType'
+        poster_is_traveller:
+          type: boolean
+        traveller_relationship:
+          type: string
+        origin_iata:
+          type: string
+        final_destination_iata:
+          type: string
+        travel_date:
+          type: string
+          format: date
+        languages_needed:
+          type: array
+          items:
+            type: string
+        languages_spoken:
+          type: array
+          items:
+            type: string
+        notes:
+          type: string
+          maxLength: 280
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/PostSegmentDto'
+
+    PostResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        poster_id:
+          type: string
+        post_type:
+          $ref: '#/components/schemas/PostType'
+        poster_is_traveller:
+          type: boolean
+        traveller_relationship:
+          type: string
+        origin_iata:
+          type: string
+        final_destination_iata:
+          type: string
+        travel_date:
+          type: string
+          format: date
+        languages_needed:
+          type: array
+          items:
+            type: string
+        languages_spoken:
+          type: array
+          items:
+            type: string
+        notes:
+          type: string
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/PostSegmentDto'
+
+    SearchPostsRequest:
+      type: object
+      properties:
+        origin_iata:
+          type: string
+        destination_iata:
+          type: string
+        date:
+          type: string
+          format: date
+        languages:
+          type: array
+          items:
+            type: string
+        post_type:
+          $ref: '#/components/schemas/PostType'
+
+    ConnectionRequest:
+      type: object
+      required: [post_id]
+      properties:
+        post_id:
+          type: string
+          format: uuid
+
+    ConnectionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        initiator_id:
+          type: string
+        post_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [pending, accepted, declined, blocked]
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    UpdateConnectionRequest:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [accepted, declined, blocked]
+
+    TravellerDetailsRequest:
+      type: object
+      required: [traveller_name]
+      properties:
+        traveller_name:
+          type: string
+        notes:
+          type: string
+
+    TravellerDetailsResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        shared_by_user_id:
+          type: string
+        traveller_name:
+          type: string
+        notes:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    SendMessageRequest:
+      type: object
+      required: [body]
+      properties:
+        body:
+          type: string
+          maxLength: 2000
+
+    MessageResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        thread_id:
+          type: string
+          format: uuid
+        sender_id:
+          type: string
+        body:
+          type: string
+        is_read:
+          type: boolean
+        sent_at:
+          type: string
+          format: date-time
+
+    ThreadResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        connection_id:
+          type: string
+          format: uuid
+        participant_a_id:
+          type: string
+        participant_b_id:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    ReportRequest:
+      type: object
+      required: [reason]
+      properties:
+        reason:
+          type: string
+          maxLength: 500
+
+    BlockRequest:
+      type: object
+
+    AirportDto:
+      type: object
+      properties:
+        iata_code:
+          type: string
+        name:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        timezone:
+          type: string
+
+    FlightDto:
+      type: object
+      properties:
+        flight_number:
+          type: string
+        airline:
+          type: string
+        origin_iata:
+          type: string
+        destination_iata:
+          type: string
+        departure_time:
+          type: string
+          format: date-time
+        arrival_time:
+          type: string
+          format: date-time
+
+    Error:
+      type: object
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+
+    FlaggedUserDto:
+      type: object
+      properties:
+        id:
+          type: string
+        first_name:
+          type: string
+        report_count:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+
+    BlockedUserDto:
+      type: object
+      properties:
+        id:
+          type: string
+        first_name:
+          type: string
+        blocked_at:
+          type: string
+          format: date-time
+
+    ReportDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        reporter_id:
+          type: string
+        reason:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        dismissed_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    ClientErrorRequest:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+        stack:
+          type: string
+        url:
+          type: string
+        userAgent:
+          type: string
+
+  parameters:
+    PageParam:
+      name: page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    PageSizeParam:
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+
+security:
+  - BearerAuth: []
+
+paths:
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Create user profile after Auth0 signup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Profile created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '409':
+          description: Profile already exists
+        '422':
+          description: Validation error
+
+  /auth/sync:
+    post:
+      tags: [Auth]
+      summary: Sync mobile_verified status from Auth0 JWT
+      responses:
+        '200':
+          description: Synced
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '404':
+          description: User profile not found
+
+  /users/me:
+    get:
+      tags: [Users]
+      summary: Get own profile
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '404':
+          description: Not found
+    patch:
+      tags: [Users]
+      summary: Update own profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+    delete:
+      tags: [Users]
+      summary: Delete own account
+      responses:
+        '204':
+          description: Deleted
+
+  /users/{id}/report:
+    post:
+      tags: [Reports]
+      summary: Report a user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportRequest'
+      responses:
+        '201':
+          description: Report created
+        '409':
+          description: Already reported
+
+  /users/{id}/block:
+    post:
+      tags: [Blocks]
+      summary: Block a user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Blocked
+        '409':
+          description: Already blocked
+
+  /users/blocked:
+    get:
+      tags: [Blocks]
+      summary: List blocked users
+      responses:
+        '200':
+          description: OK
+
+  /users/blocked/{id}:
+    delete:
+      tags: [Blocks]
+      summary: Unblock a user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Unblocked
+
+  /posts:
+    post:
+      tags: [Posts]
+      summary: Create a post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePostRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostResponse'
+
+  /posts/search:
+    get:
+      tags: [Posts]
+      summary: Search posts
+      parameters:
+        - name: origin_iata
+          in: query
+          schema:
+            type: string
+        - name: destination_iata
+          in: query
+          schema:
+            type: string
+        - name: date
+          in: query
+          schema:
+            type: string
+        - name: languages
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: post_type
+          in: query
+          schema:
+            $ref: '#/components/schemas/PostType'
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostResponse'
+
+  /posts/{id}:
+    get:
+      tags: [Posts]
+      summary: Get a single post
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostResponse'
+        '404':
+          description: Not found
+    patch:
+      tags: [Posts]
+      summary: Edit/deactivate own post
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                notes:
+                  type: string
+                is_active:
+                  type: boolean
+      responses:
+        '200':
+          description: Updated
+    delete:
+      tags: [Posts]
+      summary: Delete own post
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Deleted
+
+  /posts/{id}/matches:
+    get:
+      tags: [Posts]
+      summary: Find posts with overlapping flight segments
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostResponse'
+
+  /posts/{id}/connections:
+    post:
+      tags: [Connections]
+      summary: Initiate a connection request
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '201':
+          description: Connection created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectionResponse'
+        '409':
+          description: Already connected
+
+  /connections:
+    get:
+      tags: [Connections]
+      summary: List own connections
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, accepted, declined, blocked]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConnectionResponse'
+
+  /connections/{id}:
+    patch:
+      tags: [Connections]
+      summary: Accept / decline / block a connection
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateConnectionRequest'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectionResponse'
+
+  /connections/{id}/traveller-details:
+    post:
+      tags: [Connections]
+      summary: Share traveller details after acceptance
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravellerDetailsRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravellerDetailsResponse'
+
+  /messages/threads:
+    get:
+      tags: [Messages]
+      summary: List conversation threads
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ThreadResponse'
+
+  /messages/threads/{id}:
+    get:
+      tags: [Messages]
+      summary: Get messages in a thread
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageResponse'
+    post:
+      tags: [Messages]
+      summary: Send a message
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendMessageRequest'
+      responses:
+        '201':
+          description: Sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+
+  /flights/search:
+    get:
+      tags: [Flights]
+      summary: Search flights (proxy to AviationStack)
+      parameters:
+        - name: origin_iata
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: destination_iata
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FlightDto'
+
+  /airports/search:
+    get:
+      tags: [Airports]
+      summary: IATA code autocomplete (unauthenticated)
+      security: []
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AirportDto'
+
+  /logs/client-error:
+    post:
+      tags: [Logs]
+      summary: Log a client-side error
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientErrorRequest'
+      responses:
+        '204':
+          description: Logged
+        '413':
+          description: Payload too large
+
+  /admin/users/flagged:
+    get:
+      tags: [Admin]
+      summary: List flagged users (3+ reports, not auto-blocked)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FlaggedUserDto'
+
+  /admin/users/blocked:
+    get:
+      tags: [Admin]
+      summary: List blocked users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BlockedUserDto'
+
+  /admin/users/{id}/reports:
+    get:
+      tags: [Admin]
+      summary: Get reports against a user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportDto'
+
+  /admin/users/{id}/block:
+    post:
+      tags: [Admin]
+      summary: Block a user (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Blocked
+
+  /admin/users/{id}/unblock:
+    post:
+      tags: [Admin]
+      summary: Unblock a user (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Unblocked
+
+  /admin/users/{id}/reports/dismiss:
+    post:
+      tags: [Admin]
+      summary: Dismiss all reports for a user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Dismissed
+
+  /health:
+    get:
+      tags: [Health]
+      summary: Liveness probe
+      security: []
+      responses:
+        '200':
+          description: Alive
+
+  /health/ready:
+    get:
+      tags: [Health]
+      summary: Readiness probe
+      security: []
+      responses:
+        '200':
+          description: Ready
+        '503':
+          description: Not ready

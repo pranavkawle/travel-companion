@@ -1,0 +1,43 @@
+# .env
+.env
+*.env
+
+# .NET
+**/bin/
+**/obj/
+*.user
+*.suo
+.vs/
+
+# Node / Angular
+**/node_modules/
+**/dist/
+**/.angular/
+**/coverage/
+
+# Playwright
+**/playwright-report/
+**/test-results/
+**/allure-results/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+docker/data/
+
+# Logs
+*.log
+
+# Secrets — NEVER commit
+.env
+**/.env.local
+**/secrets.json
