@@ -1,0 +1,45 @@
+@if (isLoading()) {
+  <div class="loading-screen">
+    <div class="loading-spinner">
+      <i class="pi pi-spin pi-globe" style="font-size: 3rem; color: var(--tc-sky);"></i>
+    </div>
+    <p>Loading Travel Companion…</p>
+  </div>
+} @else {
+  <main class="app-main">
+    <router-outlet />
+  </main>
+
+  @if (isAuthenticated()) {
+    <nav class="bottom-nav">
+      <a routerLink="/home" routerLinkActive="active" class="nav-item">
+        <i class="pi pi-home"></i>
+        <span>Home</span>
+      </a>
+      <a routerLink="/search" routerLinkActive="active" class="nav-item">
+        <i class="pi pi-search"></i>
+        <span>Search</span>
+      </a>
+      <a routerLink="/connections" routerLinkActive="active" class="nav-item">
+        <i class="pi pi-users"></i>
+        <span>Connections</span>
+      </a>
+      <a routerLink="/messages" routerLinkActive="active" class="nav-item">
+        <i class="pi pi-envelope"></i>
+        <span>Messages</span>
+      </a>
+      <a routerLink="/profile" routerLinkActive="active" class="nav-item">
+        <i class="pi pi-user"></i>
+        <span>Profile</span>
+      </a>
+      @if (isAdmin()) {
+        <a routerLink="/admin" routerLinkActive="active" class="nav-item">
+          <i class="pi pi-shield"></i>
+          <span>Admin</span>
+        </a>
+      }
+    </nav>
+  }
+
+  <p-toast position="top-center" />
+}

@@ -1,0 +1,100 @@
+@import 'tailwindcss';
+@import 'primeicons/primeicons.css';
+
+/* ===== Travel Companion Design System ===== */
+:root {
+  /* Palette — warm travel/aviation inspired */
+  --tc-navy: #0B1F3A;
+  --tc-navy-light: #14315A;
+  --tc-sky: #2D8CF0;
+  --tc-sky-light: #5BA8F5;
+  --tc-sand: #F4EFE6;
+  --tc-sand-dark: #E8DFD0;
+  --tc-coral: #E85D5D;
+  --tc-green: #2D9B6F;
+  --tc-amber: #F5A623;
+  --tc-white: #FFFFFF;
+  --tc-gray-50: #F9FAFB;
+  --tc-gray-100: #F3F4F6;
+  --tc-gray-200: #E5E7EB;
+  --tc-gray-300: #D1D5DB;
+  --tc-gray-400: #9CA3AF;
+  --tc-gray-500: #6B7280;
+  --tc-gray-600: #4B5563;
+  --tc-gray-700: #374151;
+  --tc-gray-800: #1F2937;
+  --tc-gray-900: #111827;
+
+  /* Typography */
+  --tc-font-display: 'Inter', system-ui, -apple-system, sans-serif;
+  --tc-font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --tc-font-mono: 'JetBrains Mono', monospace;
+
+  /* Spacing scale */
+  --tc-space-xs: 0.25rem;
+  --tc-space-sm: 0.5rem;
+  --tc-space-md: 1rem;
+  --tc-space-lg: 1.5rem;
+  --tc-space-xl: 2rem;
+  --tc-space-2xl: 3rem;
+
+  /* Radius */
+  --tc-radius-sm: 6px;
+  --tc-radius-md: 10px;
+  --tc-radius-lg: 16px;
+  --tc-radius-full: 9999px;
+
+  /* Shadows */
+  --tc-shadow-sm: 0 1px 2px rgba(11, 31, 58, 0.06);
+  --tc-shadow-md: 0 4px 12px rgba(11, 31, 58, 0.08);
+  --tc-shadow-lg: 0 12px 32px rgba(11, 31, 58, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--tc-font-body);
+  background-color: var(--tc-sand);
+  color: var(--tc-navy);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Mobile-first: 375px+ baseline */
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Focus visibility for keyboard nav */
+:focus-visible {
+  outline: 2px solid var(--tc-sky);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* PrimeNG overrides */
+.p-component {
+  font-family: var(--tc-font-body);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--tc-gray-300);
+  border-radius: 3px;
+}
